@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  dev:
+    build: .
+    image: sample_app:latest
+    container_name: sample_project_dev
+    volumes:
+      - ./src:/app/src
+
+  unit_test:
+    build: .
+    image: sample_app:latest
+    container_name: sample_project_unit_test
+    volumes:
+      - ./reports:/app/reports
+      - ./scripts:/app/scripts
+      - ./tests:/app/tests
+      - ./src:app/src
+
+    entrypoint: ["bash" ,"./scripts/docker-entrypoint.sh", "-c"]
+
+  e2e-test:
+    build: .
+    image: sample_app:latest
+    container_name: sample_app_e2e_test
+    volumes:
+      - ./reports:/app/reports
+      - ./scripts:/app/scripts
+      - ./tests:/app/tests
+      - ./src:/app/src
+
+    entrypoint: ["bash" ,"/app/scripts/docker-entrypoint.sh", "-e"]

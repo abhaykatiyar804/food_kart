@@ -1,0 +1,5 @@
+cache-dir = "./.poetry_cache"
+
+[virtualenvs]
+in-project = true
+prompt = "{project_name}-py{python_version}"
