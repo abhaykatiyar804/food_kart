@@ -90,8 +90,8 @@ class Restaurant(ISubject):
             order = orders.order_details.orders
             order_id = orders.order_details.order_id
             can_process = (
-                all(item in self.menu for item, quantity in order.items())
-                and self.capacity_consume + sum(order.values()) <= self.capacity
+                    all(item in self.menu for item, quantity in order.items())
+                    and self.capacity_consume + sum(order.values()) <= self.capacity
             )
             if can_process:
                 self.orders.put(Orderid_Order(order_id, order))
@@ -103,7 +103,7 @@ class Restaurant(ISubject):
             order: Orderid_Order = self.orders.get()
             for item, quantity in order.order.items():
                 time.sleep(1)
-                print(f"Processing {item} of {quantity} quantity")
+                print(f"Processing {item} of {quantity} quantity", flush=True)
             self.capacity_consume -= sum(order.order.values())
             self.observers.complete_order(self.restaurant_id, order_id=order.order_id)
 
@@ -127,7 +127,7 @@ class IOrderRepo(ABC):
 
     @abc.abstractmethod
     def get_order_by_id(
-        self, restaurant_id: str, order_id: str
+            self, restaurant_id: str, order_id: str
     ) -> Optional["Order"]: ...
 
     @abc.abstractmethod
@@ -171,7 +171,7 @@ class RestaurantService:
         self.restaurant_store = restaurant_store
 
     def register_restaurant(
-        self, name: str, menu: dict, capacity: int, order_manager: IOrderManagerObserver
+            self, name: str, menu: dict, capacity: int, order_manager: IOrderManagerObserver
     ):
         restaurant = Restaurant(name, menu, capacity)
         restaurant.subscribe_observer(observer=order_manager)
@@ -254,13 +254,13 @@ class OrderEvent:
 
 class Order:
     def __init__(
-        self,
-        cost,
-        restaurant_name=None,
-        restaurant_id=None,
-        order_detail=None,
-        user_id=None,
-        order_id=None,
+            self,
+            cost,
+            restaurant_name=None,
+            restaurant_id=None,
+            order_detail=None,
+            user_id=None,
+            order_id=None,
     ):
         self.cost: int = cost
         self.order_status: OrderStatus = OrderStatus.PLACED
@@ -312,7 +312,7 @@ class LowestPriceRestaurantStrategy(RestaurantSelectionStrategy):
         return self.calculate_cost(available_restaurant, order_details)
 
     def calculate_cost(
-        self, restaurants: list[Restaurant], order_details: dict
+            self, restaurants: list[Restaurant], order_details: dict
     ) -> list[RestaurantCost]:
 
         selected = []
@@ -337,7 +337,7 @@ class LowestPriceRestaurantStrategy(RestaurantSelectionStrategy):
 class OrderManager(IOrderManagerObserver):
 
     def __init__(
-        self, restaurant_service: RestaurantService, order_service: OrderService
+            self, restaurant_service: RestaurantService, order_service: OrderService
     ):
         self.restaurant_service = restaurant_service
         self.order_service = order_service
@@ -356,7 +356,7 @@ class OrderManager(IOrderManagerObserver):
         self.restaurant_selection_strategy = strategy
 
     def place_order(
-        self, user_id: str, orders: dict, restaurant_strategy: SelectionStrategy
+            self, user_id: str, orders: dict, restaurant_strategy: SelectionStrategy
     ):
         self.set_strategy(restaurant_strategy)
         handler = self.state_machine[OrderState.SELECTED_RESTAURANT]
@@ -365,8 +365,8 @@ class OrderManager(IOrderManagerObserver):
         event = OrderEvent(
             order_state=OrderState.SELECTED_RESTAURANT, order_details=order_details
         )
-        threading.Thread(target=handler, args=(event,)).start()
-        # handler(event)
+        # threading.Thread(target=handler, args=(event,)).start()
+        handler(event)
 
     def restaurant_selection_handler(self, order_event: OrderEvent):
 
@@ -387,7 +387,7 @@ class OrderManager(IOrderManagerObserver):
             else:
                 raise RestaurantNotFound()
         except RestaurantNotFound:
-            print(f"Can not place order , no restaurant found!!")
+            print(f"Can not place order , no restaurant found!!", flush=True)
 
     def place_order_handler(self, order_event: OrderEvent):
         selected_restaurants: list[RestaurantCost] = (
@@ -413,7 +413,7 @@ class OrderManager(IOrderManagerObserver):
             handler = self.state_machine[OrderState.ORDER_PROCESSING]
             handler(event)
         else:
-            print('Restaurnat Not Available')
+            print('Restaurnat Not Available', flush=True)
 
     def order_processing_handler(self, order_event: OrderEvent):
         restaurant = order_event.order_details.qualifying_restaurant
@@ -436,61 +436,3 @@ class OrderManager(IOrderManagerObserver):
         print(f"order complete ::: {order}")
 
 
-if __name__ == "__main__":
-    restaurant_store = RestaurantStore()
-    restaurant_service = RestaurantService(restaurant_store)
-
-    order_store = OrderStore()
-    order_service = OrderService(order_store=order_store)
-    order_manager = OrderManager(
-        restaurant_service=restaurant_service, order_service=order_service
-    )
-
-    restaurant_service.register_restaurant(
-        name="BurgerKing",
-        menu={"king_burger": 10, "samosa_pizza": 20, "alu_pasta": 19},
-        capacity=15,
-        order_manager=order_manager,
-    )
-    restaurant_service.register_restaurant(
-        name="Sarvana",
-        menu={"bendi_macaroni": 12, "samosa_pizza": 25, "alu_pasta": 17},
-        capacity=20,
-        order_manager=order_manager,
-    )
-
-    restaurants: list[Restaurant] = restaurant_service.get_all_restaurant()
-    for restaurant in restaurants:
-        print(restaurant)
-
-    order_manager.place_order(
-        user_id="user1",
-        orders={"bendi_macaroni": 3, "samosa_pizza": 2},
-        restaurant_strategy=SelectionStrategy.LOW_PRICE,
-    )
-
-    orders = order_service.get_all_orders()
-    for order in orders:
-        print(order)
-
-
-
-    order_manager.place_order(
-        user_id="user1",
-        orders={"bendi_macaroni": 9, "samosa_pizza": 5},
-        restaurant_strategy=SelectionStrategy.LOW_PRICE,
-    )
-
-
-    time.sleep(1)
-    restaurants: list[Restaurant] = restaurant_service.get_all_restaurant()
-    for restaurant in restaurants:
-        print(restaurant)
-
-    time.sleep(1)
-    restaurants: list[Restaurant] = restaurant_service.get_all_restaurant()
-    for restaurant in restaurants:
-        print(restaurant)
-    orders = order_service.get_all_orders()
-    for order in orders:
-        print(order)
