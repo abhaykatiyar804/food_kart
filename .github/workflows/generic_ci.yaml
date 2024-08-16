@@ -1,7 +1,5 @@
 name: Python CI workflow
-#on:
-#  push:
-#    branches: main
+on: [push, pull_request]
 
 
 jobs:
@@ -19,10 +17,15 @@ jobs:
 
     steps:
       - name: echo workspace
-        run: echo ${{ github.workspace }}
+        run: echo "${{ github.workspace }}"
 
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: list repo and ref
+        run: |
+          echo "${{github.ref}}" REF
+          echo "${{github.repository}}" REPO
       
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
@@ -31,6 +34,6 @@ jobs:
         run: apt install tree
 
       - name : run python
-        run: python -m tdd_food_kart_1  
+        run: python -m tdd_food_kart_1
 
 
