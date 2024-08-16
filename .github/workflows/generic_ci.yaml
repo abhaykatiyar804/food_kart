@@ -30,7 +30,7 @@ jobs:
       - name : install tree
         run: apt install tree
 
-      - name :  list tree
-        run: tree .
+      - name : run python
+        run: python -m tdd_food_kart_1  
 
 
