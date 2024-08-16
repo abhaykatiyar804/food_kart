@@ -37,8 +37,13 @@ jobs:
 
       - name: Project Setup 
         run: |
-          echo ":octocat: Project Setup in Progress :octocat: " 
+          echo "🤖 Project Setup in Progress 🤖 " 
           ./scripts/setup.sh
+
+      - name: Refactor Code
+        run: |
+          echo " 🚩 Linting the code 🚩"
+          ./scripts/lint-black.sh
 
       
       - name:  echo workspace after  checkout
