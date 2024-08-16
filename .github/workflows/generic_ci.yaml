@@ -26,7 +26,9 @@ jobs:
         run: echo "${{ github.workspace }}"
 
       - name: echo event
-        run: echo  '${{ toJson(github.event) }}'
+        run: |
+          echo "event name is:" ${{ github.event_name }}
+          echo "event type is:" ${{ github.event.action }}
 
       - name: checkout
         uses: actions/checkout@v4
