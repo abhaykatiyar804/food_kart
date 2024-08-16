@@ -51,7 +51,8 @@ jobs:
       - name: Run program
         run: poetry run  python -m tdd_food_kart_1
 
-
+      - name: Git Status
+        run:  git status && git status --porcelain
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
 
