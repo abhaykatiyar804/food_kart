@@ -48,6 +48,9 @@ jobs:
       - name: Create package
         run: poetry build
 
+      - name: Run program
+        run: python -m tdd_food_kart_1
+
 
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
