@@ -15,6 +15,7 @@ jobs:
     environment: DEV
     container:
       image: akdocker528/food_kart:latest
+
       credentials:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOKCER_PASSWORD}}
