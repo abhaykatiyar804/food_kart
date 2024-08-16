@@ -18,7 +18,7 @@ jobs:
 
 
     container:
-      image: abkat528/food_kart
+      image: akdocker528/food_kart:latest
       credentials:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOKCER_PASSWORD}}
