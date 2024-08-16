@@ -25,6 +25,9 @@ jobs:
       - name: echo workspace
         run: echo "${{ github.workspace }}"
 
+      - name: echo event
+        run: echo "${{github.event}}"
+
       - name: checkout
         uses: actions/checkout@v4
         with:
