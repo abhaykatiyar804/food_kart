@@ -15,7 +15,7 @@ jobs:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOKCER_PASSWORD}}
       volumes:
-        - ${{git.workspace}}:/code
+        - ${{github.workspace}}:/code
 
     steps:
       - name: echo workspace
