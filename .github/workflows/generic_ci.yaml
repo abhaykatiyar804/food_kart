@@ -1,5 +1,11 @@
 name: Python CI workflow
-on: [push, pull_request]
+on:
+  pull_request:
+    branches: main
+    types: [opened,reopened,synchronize]
+  push:
+    branches: main
+
 
 
 jobs:
@@ -33,5 +39,6 @@ jobs:
 #
 #      - name : list
 #        run: tree .
+
 
 
