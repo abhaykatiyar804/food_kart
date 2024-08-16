@@ -35,6 +35,11 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.sha}}
 
+      - name: Project Setup 
+        run: |
+          echo ":octocat: Project Setup in Progress :octocat: " 
+          ./scripts/setup.sh
+
       
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
