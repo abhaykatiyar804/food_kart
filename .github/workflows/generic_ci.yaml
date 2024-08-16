@@ -49,7 +49,7 @@ jobs:
         run: poetry build
 
       - name: Run program
-        run: python -m tdd_food_kart_1
+        run: poetry run  python -m tdd_food_kart_1
 
 
       - name:  echo workspace after  checkout
