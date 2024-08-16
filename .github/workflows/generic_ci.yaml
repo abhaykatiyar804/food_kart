@@ -21,11 +21,9 @@ jobs:
 
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{github.event.pull_request.head.sha}}
 
-      - name: list repo and ref
-        run: |
-          echo "${{github.ref}}" REF
-          echo "${{github.repository}}" REPO
       
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
@@ -33,7 +31,7 @@ jobs:
       - name : install tree
         run: apt install tree
 
-      - name : run python
-        run: python -m tdd_food_kart_1
+      - name : list
+        run: tree .
 
 
