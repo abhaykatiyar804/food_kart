@@ -37,8 +37,8 @@ jobs:
       - name : install tree
         run: apt install tree
 
-      - name : list
-        run: tree .
+#      - name : list
+#        run: tree .
 
 
 
