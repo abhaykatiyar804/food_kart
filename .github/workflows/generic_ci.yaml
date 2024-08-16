@@ -45,7 +45,10 @@ jobs:
           echo " 🚩 Linting the code 🚩"
           ./scripts/lint-black.sh
 
-      
+      - name: Create package
+        run: poetry build
+
+
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
 
