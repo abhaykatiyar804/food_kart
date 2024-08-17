@@ -35,7 +35,40 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.sha}}
 
-      
+
+      - name: Project Setup 
+        run: |
+          echo "🤖 Project Setup in Progress 🤖 " 
+          ./scripts/setup.sh
+
+      - name: Refactor Code
+        run: |
+          echo " 🚩 Linting the code 🚩"
+          ./scripts/lint-black.sh
+
+      - name: Create package
+        run: poetry build
+
+      - name: Run program
+        run: poetry run  python -m tdd_food_kart_1
+
+      - name: Git Status
+        run:  git config --global --add safe.directory $(pwd)  && git status && git status --porcelain
+
+      - name: Commit changes if pr
+        if: github.event_name == 'pull_request'
+        run: |
+          if [-n "$(git status --proclain)"] ; then
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "[skip-ci] 🤖 Formatting and generating documentation for ${{github.workspace}} " 
+          git push origin ${{github.base_ref}}
+          echo "Pushed changes"
+          else
+            echo " No changes to commit"
+          fi
+
+
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
 
