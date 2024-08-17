@@ -1,5 +1,6 @@
 name: Python CI workflow
 on:
+
   pull_request:
     branches: main
     types: [opened,reopened,synchronize]
@@ -53,7 +54,7 @@ jobs:
         run: poetry run  python -m tdd_food_kart_1
 
       - name: Git Status
-        run:  git status && git status --porcelain
+        run:  git config --global --add safe.directory && git status && git status --porcelain
 
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
