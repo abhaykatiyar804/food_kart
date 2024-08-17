@@ -415,6 +415,21 @@ class OrderManager(IOrderManagerObserver):
         else:
             print("Restaurnat Not Available", flush=True)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def order_processing_handler(self, order_event: OrderEvent):
         restaurant = order_event.order_details.qualifying_restaurant
         restaurant.process_order()
@@ -427,6 +442,47 @@ class OrderManager(IOrderManagerObserver):
     # def order_complete_handler(self, order_event: OrderEvent):
     #     pass
     #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def complete_order(self, restaurant_id, order_id):
         order: Order = self.order_service.get_order_service(
             restaurant_id=restaurant_id, order_id=order_id

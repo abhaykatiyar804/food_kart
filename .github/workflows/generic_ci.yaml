@@ -37,6 +37,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.sha}}
 
+
       - name: Project Setup 
         run: |
           echo "🤖 Project Setup in Progress 🤖 " 
@@ -55,6 +56,20 @@ jobs:
 
       - name: Git Status
         run:  git config --global --add safe.directory $(pwd)  && git status && git status --porcelain
+
+      - name: Commit changes if pr
+        if: github.event_name == 'pull_request'
+        run: |
+          if [-n "$(git status --procelain)"] ; then
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "[skip-ci] 🤖 Formatting and generating documentation for ${{github.workspace}} " 
+          git push origin ${{github.base_ref}}
+          echo "Pushed changes"
+          else
+            echo " No changes to commit"
+          fi
+
 
       - name:  echo workspace after  checkout
         run: echo ${{ github.workspace }}
